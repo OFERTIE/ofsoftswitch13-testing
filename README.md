@@ -103,11 +103,21 @@ The results should show much the same bandwidth (approximately 30Mbits/s).  Now 
 
 > h1 iperf3 -c fd10:0:0::2 -p 5001
 
-The results for this should show that the bandwidth has been limited to around 5MBit/s.  It is likley it will be slightly over because of the dynamics of how the bandwidth restriction is applied and how this interacts with TCP.
+The results for this should show that the bandwidth has been limited to around 5MBit/s.  It is likely it will be slightly over because of the dynamics of how the bandwidth restriction is applied and how this interacts with TCP.
 
 There are numerous other flow modification rules you could add.  Here is a selection below, see if you can figure out what they do:
 
-s1 dpctl unix:/tmp/s1 flow-mod cmd=add,table=0 ...
+> s1 dpctl unix:/tmp/s1 flow-mod cmd=add,table=0 in\_port=2,eth\_type=0x86dd,ipv6\_src=fd10:0:0::2/48 meter:1 apply:output=1
+
+> s2 dpctl unix:/tmp/s2 flow-mod cms=add,table=0 in\_port=1,eth\_type=0x86dd,ipv6\_dest=fd10:0:0::1/48 meter:1 apply:output=2
+
+> s1 dpctl unix:/tmp/s1 flow-mod cms=add,table=0 in\_port=1,eth\_type=0x800,ip\_proto=6 meter:1 apply:output=2
+
+> s2 dpctl unix:/tmp/s2 flow-mod cmd=add,table=0 in\_port=1,eth\_type=0x86dd,ip\_proto=17 meter:1 apply:output=2
+
+> s1 dpctl unix:/tmp/s1 table=0 in\_port=1,eth\_type=0x800,ip\_dscp=8 meter:1 apply:output=2
+
+> s2 dpctl unix:/tmp/s2 flow-mod cmd=add,table=0 in\_port=1,eth\_type=0x86dd,ipv6\_flabel=23 meter:1 apply:output=2
 
 
 Automated Testing
