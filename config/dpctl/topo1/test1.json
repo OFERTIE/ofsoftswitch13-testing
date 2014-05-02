@@ -1,0 +1,44 @@
+[
+	{
+		"name":"Strong Rate Limit on IPv6 Ethernet Type", 
+		"commands": 
+		[
+ 			{ 	
+				"switch":"s1", 
+				"command_type":"meter-mod", 
+				"arguments":"flags=1,meter=1 drop:rate=500" 
+			},
+			{ 	
+				"switch":"s1",
+				"command_type":"flow-mod", 
+				"arguments":"table=0 in_port=2,eth_type=0x86dd meter:1 apply:output=1" 
+			},  
+			{ 
+				"switch":"s1", 
+				"command_type":"flow-mod", 
+				"arguments":"table=0 in_port=1,eth_type=0x86dd meter:1 apply:output=2"
+			}
+		]
+	},
+	{
+                "name":"Weak Rate Limit on IPv6 Ethernet Type",
+                "commands":
+                [
+                        {
+                                "switch":"s1",
+                                "command_type":"meter-mod",
+                                "arguments":"flags=1,meter=1 drop:rate=5000"
+                        },
+                        {       
+				"switch":"s1",
+                                "command_type":"flow-mod",
+                                "arguments":"table=0 in_port=2,eth_type=0x86dd meter:1 apply:output=1"
+                        },
+                        {
+                                "switch":"s1",
+                                "command_type":"flow-mod",
+                                "arguments":"table=0 in_port=1,eth_type=0x86dd meter:1 apply:output=2"
+                        }
+                ]
+        }
+]	

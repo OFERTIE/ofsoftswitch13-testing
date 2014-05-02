@@ -1,0 +1,14 @@
+[
+	{
+		"host":"h1",
+		"interface":"h1-eth1",
+		"action":"add",
+		"address_netmask":"fd10:0:0::1/48"
+	},
+	{
+                "host":"h2",
+                "interface":"h2-eth1",
+                "action":"add",
+                "address_netmask":"fd10:0:0::2/48"
+        }
+]
