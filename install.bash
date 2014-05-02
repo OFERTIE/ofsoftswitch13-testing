@@ -7,6 +7,7 @@ echo "----------------------------------------------------------"
 echo "OpenFlow 1.3 Software Switch Testing Environment Installer"
 echo "----------------------------------------------------------"
 
+sudo apt-get update || { echo -e "\n\nCould not update package list for APT.\n"; exit 1; }
 cd ${BUILD_DIR}
 echo -e "\n\nDownloading dependencies\n"
 if [ ! -d mininet ]; then
@@ -44,6 +45,10 @@ else
 fi
 
 cd ${BASE_DIR}
+echo "------------------------------------------------------"
+echo "OpenFlow 1.3 Software Switch Testing Environment Usage"
+echo "------------------------------------------------------"
+
 echo -e "\n\nOpenFlow 1.3 software switch testing environment been successfully installed.  You can run tests against the following topologies:
 `ls tests/`
 
@@ -53,9 +58,20 @@ These can either be run once directly using python:
 
 	E.g.  python ${BASE_DIR}/tests/topo1/test1.py
 
-Or multiple times using the runTestsRepeated.bash script:
+Or multiple times using the run-tests-repeatedly.bash script:
 
-	sudo ${BASE_DIR}/run-test-repeatedly.bash  TOPOLOGY TEST ITERATIONS
+	sudo ${BASE_DIR}/run-test-repeatedly.bash TOPOLOGY TEST ITERATIONS
 	
-	E.g. ${BASE_DIR}/run-test-repeatedly.bash topo1 test1 10\n"
+	E.g. ${BASE_DIR}/run-test-repeatedly.bash topo1 test1 10
 
+Results from these tests can be found in CSV format in ${BASE_DIR}/reults/TOPOLOGY/TEST/ in the form:
+
+	Traffic Type,Bandwidth (MBits/s),Packet Loss (%),Jitter / Packet Retransmits,Local CPU Load,Remote CPU Load
+
+Once you have produced results for a particular topology and test you can process these results to produces box plots of network statistics:
+
+	${BASE_DIR}/process-results.py TOPOLOGY TEST
+	
+	E.g. ${BASE_DIR}/process-results.py topo1 test1
+
+Box plots produced by this script can be found in ${BASE_DIR}/graphs/TOPOLOGY/TEST/png/
