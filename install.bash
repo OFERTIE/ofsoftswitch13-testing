@@ -44,7 +44,7 @@ else
 fi
 
 cd ${BASE_DIR}
-echo -e "\n\nOpenFlow 1.3 software switch testing environment been successfully installed.  You can run tests againgst the following topologies:
+echo -e "\n\nOpenFlow 1.3 software switch testing environment been successfully installed.  You can run tests against the following topologies:
 `ls tests/`
 
 These can either be run once directly using python:
