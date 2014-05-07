@@ -1,3 +1,5 @@
+#!/usr/bin/python
+import sys
 import os
 rootdir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.sys.path.insert(0, rootdir)
@@ -7,7 +9,7 @@ import re
 import json
 import random
 import uuid
-from ofertieutils import Ofertie
+from oftestutils import Oftutils
 from time import sleep
 from mininet.util import quietRun
 
@@ -15,13 +17,13 @@ class Topo1Test1( unittest.TestCase ):
 
     output_type = "machine"
     output_destination = "file"
-    topology = "basicIPv6"
+    topology = "topo1"
     basepath = str(os.path.normpath(rootdir))
 
     def test1( self ):
         print >> sys.stderr, "Test 1: Testing flow modifications using eth_type=0x86dd"
-        network = Ofertie.setupNetwork( self.topology, self.basepath )
-        iperf_pid = Ofertie.doIperf3Server( network, 'h2' )
+        network = Oftutils.setupNetwork( self.topology, self.basepath )
+        iperf_pid = Oftutils.doIperf3Server( network, 'h2' )
 
         test_file = os.path.normpath(os.path.join( self.basepath, 'config', 'iperf', self.topology, 'test1.json' ))
         json_data = open(test_file)
@@ -34,10 +36,10 @@ class Topo1Test1( unittest.TestCase ):
 
         results_folder = os.path.normpath(os.path.join( self.basepath, 'results', self.topology, "test1" ))
 
-        Ofertie.runTestSets( network, tests, ofcommands_list, self, results_folder )
+        Oftutils.runTestSets( network, tests, ofcommands_list, self, results_folder )
 
-        Ofertie.killProcess( network, 'h2', iperf_pid )
-        Ofertie.finished( network )
+        Oftutils.killProcess( network, 'h2', iperf_pid )
+        Oftutils.finished( network )
 
 if __name__ == '__main__':
     unittest.main()

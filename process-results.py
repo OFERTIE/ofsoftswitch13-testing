@@ -9,12 +9,12 @@ basepath = str(os.path.normpath(os.path.dirname(os.path.realpath( __file__ ))))
 topology = sys.argv[1]
 test_num = sys.argv[2]
 results_path = os.path.normpath(os.path.join( basepath, 'results', topology, test_num ))
-if !os.path.isdir(results_path):
-  print >> sys.stderr "ERROR: There are no results for topology "+topology+" test "+test_num+"."
+if not os.path.isdir(results_path):
+  print >> sys.stderr, "ERROR: There are no results for topology "+topology+" test "+test_num+"."
   exit(1)
 results_files = [ os.path.join(results_path, f) for f in os.listdir(results_path) if os.path.isfile(os.path.join(results_path,f)) ]
-if len(results_file) == 0:
-  print >> sys.stderr "ERROR: There are no results for topology "+topology+" test "+test_num+"."
+if len(results_files) == 0:
+  print >> sys.stderr, "ERROR: There are no results for topology "+topology+" test "+test_num+"."
   exit(1)
 results = {}
 field_maps = { 'bandwidth':'Bandwidth (Mb/s)', 'packet_loss':'Packet Loss %', 'jitter_retransmits':'Jitter ms / Packet Retransmits', 'local_cpu_load':'Local CPU Load', 'remote_cpu_load':'Remote CPU Load' }
@@ -61,7 +61,7 @@ for (r, result) in results.items():
         csv_fh.write('"Traffic Type","' + field_maps[f] + '"\n')
         rscript_fh.write('csv <- read.csv("../csv/'+filename+'.csv",header=T,sep=",")\n')
         rscript_fh.write('data <- t(csv)\n')
-	graph_width = 120 * len(field.items())
+	graph_width = 120 + 100 * len(field.items())
         boxplots = ','.join(field.keys())
 	subtest_num = 0
 	startnum = 1
@@ -69,11 +69,14 @@ for (r, result) in results.items():
         bp_colours_arr = []
         subtest_ids_arr = []
         subtest_names_arr = []
+	max_value = 0
         for (s, subtest) in field.items():
             bp_colours_arr.append(colours[subtest_num%len(colours)])
 	    subtest_ids_arr.append(s)
             subtest_names_arr.append(s.replace("_", " "))
 	    subtest_num = subtest_num + 1
+	    if max(subtest['values']) > max_value:
+                max_value = max(subtest['values'])
             for value in subtest['values']:
                csv_fh.write('"' + s + '",' + str(value) + '\n')
             stopnum = startnum - 1 + len(subtest['values'])
@@ -83,8 +86,10 @@ for (r, result) in results.items():
 	bp_colours = '"' + '","'.join(bp_colours_arr) + '"'
 	subtest_ids = ','.join(subtest_ids_arr)
 	subtest_names = '"' + '","'.join(subtest_names_arr) + '"'
+        ylim_max = str(max_value * 1.1)
+        print >> sys.stderr, r + ":" + s + ":"+ f + ":" + ylim_max
 	rscript_fh.write('png("../png/'+filename+'.png", '+str(graph_width)+', 300)\n')
-	rscript_fh.write('boxplot('+subtest_ids+',col=c('+bp_colours+'),names=c('+subtest_names+'),main="'+topology+' '+test_num+'\n'+r.replace("_", " ")+' - '+field_maps[f]+'",xlab="Traffic Type",ylab="'+field_maps[f]+'")\n')
+	rscript_fh.write('boxplot('+subtest_ids+',col=c('+bp_colours+'),names=c('+subtest_names+'),main="Topology: '+topology+', Test: '+test_num+'\n'+r.replace("_", " ")+'",xlab="Traffic Type",ylab="'+field_maps[f]+'",ylim=c(0,'+ylim_max+'))\n')
 	rscript_fh.write('graphics.off()')
 	rscript_fh.close()
 	os.system('cd '+os.path.dirname(rscript_file_location)+'; /usr/bin/Rscript ' + filename + ".r")

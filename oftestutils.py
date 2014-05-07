@@ -23,7 +23,7 @@ class Oftutils():
     @staticmethod
     def createShell( topo, basepath ):
         print >> sys.stderr, "Creating Mininet shell for "+topo
-        topofile = os.path.normpath(os.path.join( basepath, 'ofertie-topos.py' ))
+        topofile = os.path.normpath(os.path.join( basepath, 'oftest-topos.py' ))
         p = pexpect.spawn( 'mn --custom %s --topo %s --mac --switch user --controller remote' % ( topofile, topo ) )
         p.expect( Oftutils.prompt )
         print >> sys.stderr, "Sleeping for " + str(Oftutils.startup_sleep) + " seconds to allow the OpenFlow controller to learn the network"
@@ -135,9 +135,10 @@ class Oftutils():
     
     @staticmethod 
     def doIperf3( p, host, connect_to, args="", time=10, port=5001 ):
-      directory = os.path.join( os.path.sep, "tmp", "ofertie",  "iperf" )
+      directory = os.path.join( os.path.sep, "tmp", "ofsoftswitch13-testing",  "iperf" )
       if not os.path.exists(directory):
         os.makedirs(directory)
+	os.chown(directory,1001,1001)
       filename = Oftutils.getNewTempFile( directory )
       command = host + " iperf3 -i 0 -J -c " + connect_to + " -p " + str(port) + " -t " + str(time) + " " + args + " | tail -n +2 | sed '/^\[/d' > " + filename
       lines = Oftutils.expectline( p, command )

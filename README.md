@@ -16,7 +16,9 @@ Once the install is complete you can do a quick test to make sure everything is 
 
 1. Start the modified NOX OpenFlow 1.3 controller:
 
-> sudo dependencies/nox13oflib/build/src/nox\_core -v -i ptcp:6633 switch
+> cd dependencies/nox13oflib/build/src/
+
+> sudo ./nox\_core -v -i ptcp:6633 switch
 
 2. Run the Mininet with topo1 as provided by oftest-topos.py:
 
@@ -31,7 +33,7 @@ Manual Testing
 --------------
 As part of this repository there is a python script that define several topologies (oftest-topos.py).  These can be used with MiniNet by slightly modifying the command in step 2 of Test Installation.  Be aware that the OpenFlow controller must aready bee running, (see step 1 of Installation Testing), before you run this command:
 
->  sudo mn --custom ofertie-topos.py --topo topo1 --mac --switch user --controller remote
+>  sudo mn --custom oftest-topos.py --topo topo1 --mac --switch user --controller remote
 
 Once you have a topology running you can add further configuration.  By default, Mininet will use 10.0.0.0/24 address for the default (eth1) interfaces on the hosts creates.  So for topo1 in the command above there are two hosts, h1 will have its h1-eth1 interface set to 10.0.0.1 and h2 will have its h2-eth1 interface set to 10.0.0.2.  If you want to configure IPv6 address this will need to be doing manually using ifconfig.  
 
@@ -109,13 +111,13 @@ There are numerous other flow modification rules you could add.  Here is a selec
 
 > s1 dpctl unix:/tmp/s1 flow-mod cmd=add,table=0 in\_port=2,eth\_type=0x86dd,ipv6\_src=fd10:0:0::2/48 meter:1 apply:output=1
 
-> s2 dpctl unix:/tmp/s2 flow-mod cms=add,table=0 in\_port=1,eth\_type=0x86dd,ipv6\_dest=fd10:0:0::1/48 meter:1 apply:output=2
+> s2 dpctl unix:/tmp/s2 flow-mod cmd=add,table=0 in\_port=1,eth\_type=0x86dd,ipv6\_dst=fd10:0:0::1/48 meter:1 apply:output=2
 
-> s1 dpctl unix:/tmp/s1 flow-mod cms=add,table=0 in\_port=1,eth\_type=0x800,ip\_proto=6 meter:1 apply:output=2
+> s1 dpctl unix:/tmp/s1 flow-mod cmd=add,table=0 in\_port=1,eth\_type=0x800,ip\_proto=6 meter:1 apply:output=2
 
 > s2 dpctl unix:/tmp/s2 flow-mod cmd=add,table=0 in\_port=1,eth\_type=0x86dd,ip\_proto=17 meter:1 apply:output=2
 
-> s1 dpctl unix:/tmp/s1 table=0 in\_port=1,eth\_type=0x800,ip\_dscp=8 meter:1 apply:output=2
+> s1 dpctl unix:/tmp/s1 flow-mod cmd=add,table=0 in\_port=1,eth\_type=0x800,ip\_dscp=8 meter:1 apply:output=2
 
 > s2 dpctl unix:/tmp/s2 flow-mod cmd=add,table=0 in\_port=1,eth\_type=0x86dd,ipv6\_flabel=23 meter:1 apply:output=2
 
