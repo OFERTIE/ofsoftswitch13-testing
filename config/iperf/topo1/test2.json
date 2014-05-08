@@ -1,24 +1,24 @@
 [
 	{
-		"name":"IPv4 TCP from a ROIA player",
+		"name":"IPv4 TCP",
 		"host":"h1",
 		"destination":"10.0.0.2",
 		"arguments":"-4"
 	},
 	{
-                "name":"IPv6 TCP from a ROIA player",
+                "name":"IPv6 TCPr",
                 "host":"h1",
                 "destination":"fd10:0:0::2",
                 "arguments":"-6"
         },
 	{
-                "name":"IPv4 UDP from a ROIA player",
+                "name":"IPv4 UDP",
                 "host":"h1",
                 "destination":"10.0.0.2",
                 "arguments":"-4 -u -b 10M"
         },
 	{
-                "name":"IPv6 UDP from a ROIA player",
+                "name":"IPv6 UDPr",
                 "host":"h1",
                 "destination":"fd10:0:0::2",
                 "arguments":"-6 -u -b 10M"

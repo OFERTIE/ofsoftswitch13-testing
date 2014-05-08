@@ -64,7 +64,7 @@ Or multiple times using the run-tests-repeatedly.bash script:
 	
 	E.g. ${BASE_DIR}/run-test-repeatedly.bash topo1 test1 10
 
-Results from these tests can be found in CSV format in ${BASE_DIR}/reults/TOPOLOGY/TEST/ in the form:
+Results from these tests can be found in CSV format in ${BASE_DIR}/results/TOPOLOGY/TEST/ in the form:
 
 	Traffic Type,Bandwidth (MBits/s),Packet Loss (%),Jitter / Packet Retransmits,Local CPU Load,Remote CPU Load
 

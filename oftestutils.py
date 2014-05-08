@@ -153,8 +153,8 @@ class Oftutils():
         print line
       
     @staticmethod
-    def doIperf3Server( p, host,args="", port=5001 ):
-      print >> sys.stderr, "Starting iperf3 server on ROIA provider"
+    def doIperf3Server( p, host, args="", port=5001 ):
+      print >> sys.stderr, "Starting iperf3 server on host " + host
       command = host + " iperf3 -sD -p " + str(port) + " " + args
       command = command.strip()
       lines = Oftutils.expectline( p, command )
@@ -298,8 +298,8 @@ class Oftutils():
         print >> sys.stderr, "Applying OpenFlow commands for: " + ofcommands['name']
         for ofcommand in ofcommands['commands']:
           Oftutils.applyDpctl(p, ofcommand['switch'], ofcommand['command_type'], 'add', ofcommand['arguments'])
-        sleep(Oftutils.rule_change_sleep)
         print >> sys.stderr, "Sleeping for " + str(Oftutils.rule_change_sleep) + " seconds to ensure OpenFlow commands have been applied."
+        sleep(Oftutils.rule_change_sleep)
         Oftutils.runTestSet( p, tests, tester, output_destination, ofcommands['name'] )
         last_ofcommands = ofcommands
   
