@@ -93,5 +93,5 @@ The results should show much the same bandwidth (approximately 30Mbits/s).  Now 
 
 > h1 iperf3 -c 10.0.0.2 -u -p 5001
 
-The results for this should show that the bandwidth has been limited to around 5MBit/s.  It is unlikely to be exactly 5Mbits/s because OpenFlow will drop packets when it see its meter is exceeded, as these packets can be quite large a decision to drop a packet or not will make a lot of difference to the exact bandwidth, expecially over only a 10 second test period.
+The results for this should show that the bandwidth has been limited to around 5MBit/s.  It is unlikely to be exactly 5Mbits/s because OpenFlow will drop packets when it see its meter is exceeded, as these packets can be reasonably large a decision to drop a packet or not will make a lot of difference to the exact bandwidth, expecially over only a 10 second test period.
 
